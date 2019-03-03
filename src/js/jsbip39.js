@@ -26,6 +26,10 @@
  * https://github.com/bitwiseshiftleft/sjcl
  */
 
+var GetIsElectrum = function(){
+	return true;
+}
+
 var Mnemonic = function(language) {
 
     var PBKDF2_ROUNDS = 2048;
@@ -101,6 +105,10 @@ var Mnemonic = function(language) {
         if (mnemonic.length == 0 || mnemonic.length % 3 > 0) {
             return false
         }
+        
+        if (GetIsElectrum())
+        	return true;//Don't bother with seed check.
+        	
         // idx = map(lambda x: bin(self.wordlist.index(x))[2:].zfill(11), mnemonic)
         var idx = [];
         for (var i=0; i<mnemonic.length; i++) {
@@ -133,7 +141,10 @@ var Mnemonic = function(language) {
         mnemonic = self.joinWords(self.splitWords(mnemonic)); // removes duplicate blanks
         var mnemonicNormalized = self.normalizeString(mnemonic);
         passphrase = self.normalizeString(passphrase)
-        passphrase = "mnemonic" + passphrase;
+        if (GetIsElectrum())
+  	 		passphrase = "electrum" + passphrase;
+        else
+         	passphrase = "mnemonic" + passphrase;
         var mnemonicBits = sjcl.codec.utf8String.toBits(mnemonicNormalized);
         var passphraseBits = sjcl.codec.utf8String.toBits(passphrase);
         var result = sjcl.misc.pbkdf2(mnemonicBits, passphraseBits, PBKDF2_ROUNDS, 512, hmacSHA512);
