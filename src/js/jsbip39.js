@@ -108,6 +108,7 @@ var Mnemonic = function(language) {
         
         if (GetIsElectrum())
         {
+        	//Do electrum checksum/version check/
 			hmac = new sjcl.misc.hmac(sjcl.codec.utf8String.toBits("Seed version"), sjcl.hash.sha512);
 			signature = sjcl.codec.hex.fromBits(hmac.encrypt(mnemonicString));
 
