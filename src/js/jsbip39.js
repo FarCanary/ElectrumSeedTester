@@ -108,6 +108,10 @@ var Mnemonic = function(language) {
         
         if (GetIsElectrum())
         {
+        	//Set electrum bech32 path.
+        	var bech32path = document.getElementById("bip141-path");
+        	bech32path.value="m/0'/0";
+        	
         	//Do electrum checksum/version check/
 			hmac = new sjcl.misc.hmac(sjcl.codec.utf8String.toBits("Seed version"), sjcl.hash.sha512);
 			signature = sjcl.codec.hex.fromBits(hmac.encrypt(mnemonicString));
