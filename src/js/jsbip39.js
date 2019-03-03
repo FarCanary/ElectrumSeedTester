@@ -100,15 +100,34 @@ var Mnemonic = function(language) {
         return self.joinWords(result);
     }
 
-    self.check = function(mnemonic) {
-        var mnemonic = self.splitWords(mnemonic);
+    self.check = function(mnemonicString) {
+        var mnemonic = self.splitWords(mnemonicString);
         if (mnemonic.length == 0 || mnemonic.length % 3 > 0) {
             return false
         }
         
         if (GetIsElectrum())
-        	return true;//Don't bother with seed check.
-        	
+        {
+			hmac = new sjcl.misc.hmac(sjcl.codec.utf8String.toBits("Seed version"), sjcl.hash.sha512);
+			signature = sjcl.codec.hex.fromBits(hmac.encrypt(mnemonicString));
+
+			if (signature[0]=='0')
+			{
+				if (signature[1]=='1')
+				{
+					return true;//standard wallet
+				}
+			}
+			else if (signature[0]=='1' && signature[1]=='0')
+			{
+				if (signature[2]=='0')
+					return true;//segwit
+				if (signature[2]=='1')
+					return true;//Two-factor authenticated wallets
+			}
+        	return false;
+        }
+                	
         // idx = map(lambda x: bin(self.wordlist.index(x))[2:].zfill(11), mnemonic)
         var idx = [];
         for (var i=0; i<mnemonic.length; i++) {
