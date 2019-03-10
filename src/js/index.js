@@ -396,7 +396,12 @@
     }
 
     function generateClicked() {
-        if (isUsingOwnEntropy()) {
+    	if (GetIsElectrum()) {
+			var errorText = "Generating electrum keys is not supported";
+			showValidationError(errorText);
+			return;
+        }
+                if (isUsingOwnEntropy()) {
             return;
         }
         clearDisplay();
