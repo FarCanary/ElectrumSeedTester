@@ -6,7 +6,10 @@ A tool for checking your electrum wallet is generating correct seeds, and the co
 
 ## Usage
 
+Download ElectrumSeedTester-standalone.html
+
 Enter your Electrum seed phrase into the 'BIP39 Phrase' field. The correct tab should automatically be selected, and the correct addresses should be shown.
+
 
 This project is a branch of Ian Colemans BIP39 tool:
 https://github.com/iancoleman/bip39
