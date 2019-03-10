@@ -100,6 +100,22 @@ var Mnemonic = function(language) {
         return self.joinWords(result);
     }
 
+	self.DisableAllButOneTab=function(tabname)
+	{
+			var bip32tab = document.getElementById("bip32-tab");
+			var bip44tab = document.getElementById("bip44-tab");
+			var bip49tab = document.getElementById("bip49-tab");
+			var bip84tab = document.getElementById("bip84-tab");
+			var bip141tab = document.getElementById("bip141-tab");
+
+			eval(tabname+"tab").childNodes[1].click();
+			bip32tab.children[0].style.display = tabname=="bip32"? "":"none";
+			bip44tab.children[0].style.display = tabname=="bip44"? "":"none";
+			bip49tab.children[0].style.display = tabname=="bip49"? "":"none";
+			bip84tab.children[0].style.display = tabname=="bip84"? "":"none";
+			bip141tab.children[0].style.display = tabname=="bip141"? "":"none";
+	}
+	
     self.check = function(mnemonicString) {
         var mnemonic = self.splitWords(mnemonicString);
         if (mnemonic.length == 0 || mnemonic.length % 3 > 0) {
@@ -120,15 +136,21 @@ var Mnemonic = function(language) {
 			{
 				if (signature[1]=='1')
 				{
+					self.DisableAllButOneTab("bip32");
 					return true;//standard wallet
 				}
 			}
 			else if (signature[0]=='1' && signature[1]=='0')
 			{
 				if (signature[2]=='0')
+				{
+					self.DisableAllButOneTab("bip141");
 					return true;//segwit
+				}
 				if (signature[2]=='1')
+				{
 					return true;//Two-factor authenticated wallets
+				}
 			}
         	return false;
         }
